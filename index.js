@@ -3,6 +3,7 @@
 let Service;
 let Characteristic;
 let RxInputs;
+let Perms
 const pollingtoevent = require('polling-to-event');
 const info = require('./package.json');
 
@@ -150,7 +151,7 @@ class OnkyoAccessory {
 		this.polling(this);
 
 		this.UUID = this.platform.api.hap.uuid.generate('homebridge:homebridge-onkyo' + this.name);
-		this.accessory = new this.platform.api.platformAccessory(this.name, this.UUID, this.platform.api.hap.Accessory.Categories.AUDIO_RECEIVER); // eslint-disable-line new-cap
+		this.accessory = new this.platform.api.platformAccessory(this.name, this.UUID, this.platform.api.hap.Categories.AUDIO_RECEIVER); // eslint-disable-line new-cap
 
 		this.createAccessoryInformationService(this.accessory);
 		this.tvService = this.createTvService(this.accessory);
@@ -831,7 +832,7 @@ class OnkyoAccessory {
 			.setCharacteristic(Characteristic.InputSourceType, inputSourceType);
 
 		input.getCharacteristic(Characteristic.ConfiguredName).setProps({
-			perms: [Characteristic.Perms.READ],
+			perms: [Perms.READ],
 		});
 
 		television.addLinkedService(input);
@@ -909,7 +910,7 @@ class OnkyoAccessory {
 			.getCharacteristic(Characteristic.ConfiguredName)
 			.setValue(this.name)
 			.setProps({
-				perms: [Characteristic.Perms.READ],
+				perms: [Perms.READ],
 			});
 
 		tvService
@@ -954,6 +955,6 @@ class OnkyoAccessory {
 }
 
 module.exports = homebridge => {
-  ({Service, Characteristic} = homebridge.hap);
+  ({Service, Characteristic, Perms} = homebridge.hap);
   homebridge.registerPlatform('homebridge-onkyo', 'Onkyo', OnkyoPlatform);
 };
